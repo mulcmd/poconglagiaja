@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Pocong Hunter: Dark Night - Boss & Level Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Poppins:wght@400;600;800&display=swap');
+        
+        * {
+            box-sizing: border-box;
+            touch-action: none;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+            overflow: hidden;
+            background-color: #050508;
+            color: #fff;
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .font-horror {
+            font-family: 'Creepster', cursive;
+        }
+
+        #game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #000;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        @keyframes redGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(220, 38, 38, 0.4); }
+            50% { box-shadow: 0 0 25px rgba(220, 38, 38, 0.8); }
+        }
+        .glow-btn {
+            animation: redGlow 2s infinite;
+        }
+
+        #rotate-device-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(5, 5, 8, 0.98);
+            z-index: 100;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        @media screen and (orientation: portrait) {
+            #rotate-device-overlay {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body class="bg-black text-white select-none">
+
+    <!-- WARNING OVERLAY FOR PORTRAIT -->
+    <div id="rotate-device-overlay">
+        <div class="text-amber-500 text-6xl mb-4 animate-bounce">
+            <i class="fa-solid fa-mobile-screen-button rotate-90"></i>
+        </div>
+        <h2 class="text-2xl font-bold font-horror text-red-500 mb-2">PUTAR PERANGKAT ANDA!</h2>
+        <p class="text-sm text-slate-300 max-w-xs">Game ini wajib dimainkan dalam posisi <strong>Landscape</strong> (Mendatar) untuk pengalaman terbaik.</p>
+    </div>
+
+    <div id="game-container">
+        <!-- Main Game Canvas -->
+        <canvas id="gameCanvas"></canvas>
+
+        <!-- TOP HUD OVERLAY -->
+        <div id="hud-overlay" class="absolute top-0 left-0 w-full p-4 flex justify-between items-start pointer-events-none hidden z-10">
+            <!-- Left Stats: Player 1 -->
+            <div class="flex flex-col gap-1 bg-slate-900/80 p-3 rounded-xl border border-cyan-500/50 backdrop-blur-md min-w-[150px]">
+                <div class="text-xs font-bold text-cyan-400 mb-1"><i class="fa-solid fa-user mr-1"></i> PLAYER 1</div>
+                <div>
+                    <div class="flex justify-between text-[10px] font-bold">
+                        <span class="text-red-400">HP</span>
+                        <span id="p1-hp-text">100 / 100</span>
+                    </div>
+                    <div class="w-full bg-gray-800 h-2.5 rounded-full overflow-hidden border border-gray-700">
+                        <div id="p1-hp-bar" class="bg-gradient-to-r from-cyan-600 to-cyan-400 h-full w-full"></div>
+                    </div>
+                </div>
+                <div class="text-[10px] text-slate-30
